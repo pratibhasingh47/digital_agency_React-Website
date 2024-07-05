@@ -1,3 +1,6 @@
 /README.md
-/src/components
+/src/components/Footer
+/src/components/Header
+/src/components/UI
+/src/components/images
 node_modules
