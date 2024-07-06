@@ -1,125 +1,129 @@
-'use client'
-import React, { useEffect, useRef } from 'react'
-import './Header.css';
+"use client";
+import React, { useEffect, useRef } from "react";
+import "./Header.css";
 
 const nav__links = [
-	{
-		path: '#hero',
-		display: 'Home'
-	},
+    {
+        path: "#hero",
+        display: "Home",
+    },
 
-	{
-		path: '#about',
-		display: 'About'
-	},
+    {
+        path: "#about",
+        display: "About",
+    },
 
-	{
-		path: '#service',
-		display: 'Service'
-	},
+    {
+        path: "#service",
+        display: "Service",
+    },
 
-	{
-		path: '#projects',
-		display: 'Projects'
-	},
+    {
+        path: "#projects",
+        display: "Projects",
+    },
 
-	{
-		path: '#blog',
-		display: 'Blog'
-	},
-]
+    {
+        path: "#blog",
+        display: "Blog",
+    },
+];
 
 const Header = ({ theme, toggleTheme }) => {
+    const headerRef = useRef(null);
 
+    const menuRef = useRef(null);
 
-	const headerRef = useRef(null);
+    const headerFunc = () => {
+        if (headerRef.current) {
+            if (
+                document.body.scrollTop > 80 ||
+                document.documentElement.scrollTop > 80
+            ) {
+                headerRef.current.classList.add("header__shrink");
+            } else {
+                headerRef.current.classList.remove("header__shrink");
+            }
+        }
+    };
 
-	const menuRef = useRef(null);
+    useEffect(() => {
+        window.addEventListener("scroll", headerFunc);
 
+        return () => window.removeEventListener("scroll", headerFunc);
+    }, []);
 
-	const headerFunc = () => {
+    const handleClick = (e) => {
+        e.preventDefault();
 
-		if (headerRef.current) {
+        const targetAttr = e.target.getAttribute("href");
 
-			if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-				headerRef.current.classList.add('header__shrink')
-			}
-			else {
-				headerRef.current.classList.remove('header__shrink')
-			}
-		}
-	};
+        const targetElement = document.querySelector(targetAttr);
 
-	useEffect(() => {
-		window.addEventListener('scroll', headerFunc)
+        if (targetElement) {
+            const location = targetElement.offsetTop;
+            window.scrollTo({
+                left: 0,
+                top: location - 80,
+                behavior: "smooth",
+            });
+        } else {
+            console.error("Element not found:", targetAttr);
+        }
+    };
 
-		return () => window.removeEventListener('scroll', headerFunc)
-	}, [])
+    const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
 
+    return (
+        <header className="header" id="intro" ref={headerRef}>
+            <div className="container">
+                <div className="nav_wrapper">
+                    <div className="logo">
+                        <h2>Digency</h2>
+                    </div>
 
-	const handleClick = e => {
-		e.preventDefault();
+                    {/* navigation */}
 
-		const targetAttr = e.target.getAttribute('href');
+                    <div
+                        className="navigation"
+                        ref={menuRef}
+                        onClick={toggleMenu}
+                    >
+                        <ul className="menu">
+                            {nav__links.map((item, index) => (
+                                <li key={index} className="menu__item">
+                                    <a
+                                        href={item.path}
+                                        onClick={handleClick}
+                                        className="menu__link"
+                                    >
+                                        {item.display}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-		const targetElement = document.querySelector(targetAttr);
+                    {/* light mode */}
 
-		if (targetElement) {
-			const location = targetElement.offsetTop;
-			window.scrollTo({
-				left: 0,
-				top: location - 80,
-				behavior: 'smooth' 
-			});
-		} else {
-			console.error('Element not found:', targetAttr); 
-		}
-	};
+                    <div className="light__mode">
+                        <span onClick={toggleTheme}>
+                            {theme === "light-theme" ? (
+                                <span>
+                                    <i className="ri-moon-fill"></i>Dark
+                                </span>
+                            ) : (
+                                <span>
+                                    <i className="ri-sun-line"></i>
+                                    Light
+                                </span>
+                            )}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </header>
+    );
+};
 
-	const toggleMenu = ()=> menuRef.current.classList.toggle('menu__active')
-
-
-
-	return (
-		<header className="header" id='intro' ref={headerRef}>
-			<div className="container">
-				<div className="nav_wrapper">
-					<div className="logo">
-						<h2>Digency</h2>
-					</div>
-
-					{/* navigation */}
-
-					<div className="navigation" ref={menuRef} onClick={toggleMenu} >
-						<ul className="menu">
-							{
-								nav__links.map((item, index) => (
-									<li
-										key={index} className="menu__item"><a href={item.path} onClick={handleClick} className="menu__link">{item.display}</a></li>
-								))
-							}
-						</ul>
-					</div>
-
-					{/* light mode */}
-
-					<div className="light__mode">
-						<span onClick={toggleTheme} >
-							{
-								theme === 'light-theme' ? (
-									<span><i className="ri-moon-fill"></i>Dark</span>) :
-									(<span><i className="ri-sun-line"></i>
-										Light</span>)
-							}
-
-						</span>
-					</div>
-
-
-				</div>
-			</div>
-		</header>
-	)
-}
-
-export default Header
+export default Header;
