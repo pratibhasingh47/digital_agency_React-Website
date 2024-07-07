@@ -87,7 +87,7 @@ https://github.com/pratibhasingh47/digital_agency_React-Website/assets/117928965
 Explore the live demonstration at https://pratibhasingh47-digital-agency.netlify.app/
 
 
-## Available Scripts
+## Available Scripts🧾
 
 In the project directory, you can run:
 
